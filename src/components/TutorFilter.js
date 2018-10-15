@@ -1,4 +1,5 @@
 /**
+ * not used, just for referenced on how to filter DB tree
  * 
  * Whilst your state won't contain the filtered list, 
  * it tells you everything you need to know to construct the filtered list.

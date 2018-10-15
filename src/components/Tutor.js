@@ -19,16 +19,24 @@ import { Route, Switch } from 'react-router-dom';
 import { store } from '../store';
 import agent from '../agent';
 
+/** 
+ * TODO:
+ * 0. update reducer, 1 for store, 1 for display, 1 for filter term + action functor
+ * 1. constructor() -> internal state store selected page + whether expanded
+ * 2. componentWillMount() -> fill store DB tree w data
+ * 3. mapStateToProps -> local props tree listen to global DB tree
+ * 4. map() side bar components -> store DB tree get all exercises titles
+ * 5. css style -> main page shift right when click
+ * 6. side bar click logic -> mapDispatchToProps 
+ *    -> functions when click side bar button 
+ *    -> set internal state + updated DB tree w selected title + 
+ *    -> filter DB tree based on selected title in DB tree
+ *    -> update "display" DB tree(component listen to display) 
+ * 
+ * 
+ * 
+ */
 
-const Main = () => (
-  <Switch>
-    <Route exact path="/" component={MCQ} />
-    <Route path="/aboutme" component={MCQ} />
-    <Route path="/contact" component={MCQ} />
-    <Route path="/projects" component={MCQ} />
-    <Route path="/resume" component={MCQ} />
-  </Switch>
-)
 
 // local props tree listen to global DB tree
 const mapStateToProps = state => {
@@ -54,11 +62,12 @@ class Tutor extends React.Component {
           <Route exact path="/home" component={MCQ}/>
         </Switch>
 
-        <SideNav
-    onSelect={(selected) => {
+
+
+
+    <SideNav onSelect={(selected) => {
         // Add your code here
-    }}
->
+    }}>
     <SideNav.Toggle />
     <SideNav.Nav defaultSelected="home">
         <NavItem eventKey="home">
