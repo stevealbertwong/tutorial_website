@@ -1,5 +1,9 @@
 /**
  * not used, just for referenced on how to filter DB tree
+ * https://grokonez.com/frontend/redux/redux-filter-sort-example-redux-reducer-example 
+ * 
+ * https://stackoverflow.com/questions/34003553/redux-what-is-the-correct-way-to-filter-a-data-array-in-reducer 
+ * https://medium.com/@yaoxiao1222/implementing-search-filter-a-list-on-redux-react-bb5de8d0a3ad 
  * 
  * Whilst your state won't contain the filtered list, 
  * it tells you everything you need to know to construct the filtered list.

@@ -9,6 +9,26 @@
     height: 100%;
   }
 
+.mainview-pos-backup {
+  position: relative;
+  overflow: hidden;
+  float:right;
+  transition: all .15s;
+  padding: 0 20px;
+  margin-left: 200px;
+}
+
+
+.mainview-pos-fail {
+  position:absolute; 
+  right:-20px;   
+}
+
+.mainview-pos {
+  position: absolute;      
+  right: 1%;
+  left: 10%;
+}
 
 .header-color {    
 
@@ -19,6 +39,8 @@
   background-clip: text;
   font-size: 30px;
   font-weight: bold;
+  position:absolute;
+  left: 10%;
   }
   
 .background-color {

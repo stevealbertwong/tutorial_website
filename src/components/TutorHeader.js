@@ -15,7 +15,7 @@ const LoggedOutView = props => {
         </li>
 
         <li className="nav-item">
-          <Link to="/hello" className="nav-link">
+          <Link to="/" className="nav-link">
             Sign in
           </Link>
         </li>
@@ -82,9 +82,9 @@ class TutorHeader extends React.Component {
       
           <div className="container">
 
-          <Link to="/" className="header-color">
+          <div className="header-color">
             {this.props.appName.toLowerCase()}
-          </Link>
+          </div>
 
           <LoggedOutView currentUser={this.props.currentUser} />
 

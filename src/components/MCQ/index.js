@@ -34,7 +34,7 @@ class MCQ extends React.Component {
     var fakeMC = [
       {      
         questionID: 0,
-        class: 6,
+        class: null,
         question: "this is an article, and then student answers",
         choice1: null,
         choice2: null,
@@ -44,7 +44,7 @@ class MCQ extends React.Component {
       },
       {      
         questionID: 1,
-        class: 6,
+        class: "MC/p6",
         question: "how many players in football team?",
         choice1: 30,
         choice2: 31,
@@ -54,7 +54,7 @@ class MCQ extends React.Component {
       },
       {
         questionID: 2,
-        class: 5,
+        class: "MC/p5",
         question: "who is us president?",
         choice1: "trump",
         choice2: "josh kusner",
@@ -62,7 +62,37 @@ class MCQ extends React.Component {
         choice4: "bush",
         answer: "choice B. Explanation: team 10 bitch "
         
-      }    
+      }, {
+        questionID: 3,
+        class: "MC/p6",
+        question: "who is google president?",
+        choice1: "trump",
+        choice2: "josh kusner",
+        choice3: "obama",
+        choice4: "bush",
+        answer: "choice B. Explanation: team 10 bitch "
+        
+      },{
+        questionID: 4,
+        class: "MC/p5",
+        question: "who is yahoo president?",
+        choice1: "trump",
+        choice2: "josh kusner",
+        choice3: "obama",
+        choice4: "bush",
+        answer: "choice B. Explanation: team 10 bitch "
+        
+      },{
+        questionID: 5,
+        class: "MC/p5",
+        question: "who is hello president?",
+        choice1: "trump",
+        choice2: "josh kusner",
+        choice3: "obama",
+        choice4: "bush",
+        answer: "choice B. Explanation: team 10 bitch "
+        
+      }      
     ];
 
     // this.props.onLoad(parsed_content);
@@ -77,7 +107,9 @@ class MCQ extends React.Component {
 
         <div className="container page">
           <div className="row">
+            <div className="mainview-pos">
             <TutorMainView />
+            </div>
           </div>
         </div>
 

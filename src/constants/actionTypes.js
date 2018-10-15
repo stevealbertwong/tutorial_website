@@ -37,3 +37,5 @@ export const PROFILE_FAVORITES_PAGE_LOADED = 'PROFILE_FAVORITES_PAGE_LOADED';
 
 
 export const LOAD_MCQ = 'LOAD_MCQ';
+export const STORE_MCQ = 'STORE_MCQ';
+export const FILTER_MCQ = 'FILTER_MCQ';
