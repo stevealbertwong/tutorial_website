@@ -21,7 +21,7 @@ const defaultState = {
   appName: 'Tutorial',
   token: null,
   viewChangeCounter: 0,
-  currentUser: true
+  currentUser: false
 };
 
 export default (state = defaultState, action) => {

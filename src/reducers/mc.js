@@ -11,13 +11,12 @@ const questions = {
 };
 
 // !! pass in default state to prevent TypeError: Cannot read property 'question' of undefined
-export default (state = {questions}, action) => {
+export default (state = {}, action) => {
     switch (action.type) {
       case LOAD_MCQ:
-        // overwrites state.question.questions
+        // overwrites state.mc.questions
         return {
-          ...state,
-          // ...state.question : action.payload
+          ...state,          
           questions: action.payload
         };
       default:

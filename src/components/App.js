@@ -47,7 +47,7 @@ class App extends React.Component {
 
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
-  // if appLoaded, allows route
+  // if state contains appLoaded, allows route
   render() {
     if (this.props.appLoaded) {
       return (

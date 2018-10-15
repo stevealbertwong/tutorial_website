@@ -1,67 +1,83 @@
-import Banner from './Banner';
-import MainView from './MainView';
+/**
+ * this page originally exists for tabs
+ * 
+ * Backend call to fetch MCQ data n populate global DB tree
+ */
+import TutorBanner from './TutorBanner';
+import TutorMainView from './TutorMainView';
 import React from 'react';
-import Tags from './Tags';
 import agent from '../../agent';
 import { connect } from 'react-redux';
-import {
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED,
-  APPLY_TAG_FILTER
-} from '../../constants/actionTypes';
+import { LOAD_MCQ } from '../../constants/actionTypes';
 
-const Promise = global.Promise;
 
 const mapStateToProps = state => ({
-  ...state.home,
-  appName: state.common.appName,
-  token: state.common.token
+  ...state.mc,  // this.props = state.mc
+  
+  // if i do this, either use this level, or dumb component
+  // this.props.appName = state.common.appName  
+  appName: state.common.appName,    
 });
 
-const mapDispatchToProps = dispatch => ({
-  onClickTag: (tag, pager, payload) =>
-    dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
-  onLoad: (tab, pager, payload) =>
-    dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
-  onUnload: () =>
-    dispatch({  type: HOME_PAGE_UNLOADED })
+// register function(API to update global DB tree) in props
+const mapDispatchToProps = dispatch => ({      
+  onLoad: (payload) => // this.props.onLoad()
+    dispatch({ type: LOAD_MCQ, payload }),    
 });
 
-class Home extends React.Component {
+// index.js export MCQ component -> used in Tutor.js
+class MCQ extends React.Component {
+  // BEFORE COMPONENT RENDER (For Ajax / Dispatcher Events)
   componentWillMount() {
-    const tab = this.props.token ? 'feed' : 'all';
-    const articlesPromise = this.props.token ?
-      agent.Articles.feed :
-      agent.Articles.all;
-    // AJAX call, once response back, update state w payload
-    this.props.onLoad(tab, articlesPromise, Promise.all([agent.Tags.getAll(), articlesPromise()]));
-  }
+    console.log("debug componentWillMount", this.props)
+    
+    var fakeMC = [
+      {      
+        questionID: 0,
+        class: 6,
+        question: "this is an article, and then student answers",
+        choice1: null,
+        choice2: null,
+        choice3: null,
+        choice4: null,
+        answer: null        
+      },
+      {      
+        questionID: 1,
+        class: 6,
+        question: "how many players in football team?",
+        choice1: 30,
+        choice2: 31,
+        choice3: 32,
+        choice4: 33,
+        answer: "choice A. Explanation: choice A is better than B since ..."        
+      },
+      {
+        questionID: 2,
+        class: 5,
+        question: "who is us president?",
+        choice1: "trump",
+        choice2: "josh kusner",
+        choice3: "obama",
+        choice4: "bush",
+        answer: "choice B. Explanation: team 10 bitch "
+        
+      }    
+    ];
 
-  componentWillUnmount() {
-    this.props.onUnload();
+    // this.props.onLoad(parsed_content);
+    this.props.onLoad(fakeMC);        
   }
 
   render() {
     return (
       <div className="home-page">
 
-        <Banner token={this.props.token} appName={this.props.appName} />
+        <TutorBanner appName={this.props.appName} />
 
         <div className="container page">
           <div className="row">
-            <MainView />
-
-            <div className="col-md-3">
-              <div className="sidebar">
-
-                <p>Popular Tags</p>
-
-                <Tags
-                  tags={this.props.tags}
-                  onClickTag={this.props.onClickTag} />
-
-              </div>
-            </div>
+            <TutorMainView />
           </div>
         </div>
 
@@ -70,4 +86,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(MCQ);
