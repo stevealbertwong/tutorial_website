@@ -15,7 +15,7 @@ const handle = require('./handlers');
 
 const app = express();
 const PORT = process.env.PORT || 4000; // see .env
-app.use(cors());
+app.use(cors());  // control ip thats allowed to contact app server
 app.use(bodyParser.json()); // Turn http request format into JSON n make it easy to parse/use
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -118,6 +118,11 @@ npm start               ## start app server, nodemon index.js
 npm seed                ## node seed.js
 
 
+nodemon --exec babel-node src/index.js  ## dev
+
+babel src -d dist       ## when code gets updated
+node dist/index.js      ## production
+
 
 ```
 
@@ -143,7 +148,45 @@ cd /server
 npm start           ## nodemon index.js
 node seed.js        ## seed mongo DB
 
-cd /server      
+cd /client      
 npm start           ## cross-env PORT=4100 react-scripts start
+
+```
+
+## Docker Deployment
+```
+ssh EC2
+
+scp docker-compose.yml nginx.conf
+
+git clone repo               ## /client + /server
+
+## compile frontend first, then docker-compose web, nginx to serve static assets w "shared volume" ??
+
+cd /client
+react-scripts build         ## auto output to /build
+surge                       ## ?? web server w domain name
+
+react-scripts build; mv ./build/index.html ./build/200.html; echo overt-health.surge.sh > build/CNAME; surge                 ## after build, rename html, save domain name into CNAME file, then upload static assets to web server w domain name
+
+OR alternatively
+build static files into existing nginx image
+then no need to worry about volume when docker swarm
+
+
+cd /server
+babel src -d dist           ## tranlate right node syntax
+docker build -t steven/image:latest ## Dockerfile build fs
+docker push steven/image:latest     ## docker cloud
+docker compose up           ## update image to registry image
+
+
+
+## when updated code or Dockerfile -> rebuild fs
+babel src -d dist
+docker build -t image
+
+
+chmod 777 /files
 
 ```
