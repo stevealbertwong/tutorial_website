@@ -1,43 +1,26 @@
 version: "3"
 services:
-  redis:
-    image: redis
+  mongdb:
+    ## seeded mongodb image
+    image: stevealbertwong/mongo:latest
     networks: 
       - webnet
-  db:
-    image: postgres
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    networks: 
-      - webnet
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: slack
     ports:
-      - "3030:5432"
+      - "3040:27017"
   web:
     image: benawad/slack-clone-server:latest
     networks:
       - webnet
-    environment:
-      DB_HOST: db
-      REDIS_HOST: redis
-      SERVER_URL: http://ec2-13-57-167-70.us-west-1.compute.amazonaws.com
-    ## both nginx n app server serving static assets
-    volumes:
-      - ./files:/app/files  ## shared volume w nginx, both serve static files
     depends_on:
-      - db
-      - redis
+      - mongdb
     # command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
     command: ["node", "index.js"]
   ## no Dockerfile for frontend since nginx instead of "react-scripts start"
   nginx:
     image: nginx
     volumes:
-      - ./mysite.template:/etc/nginx/conf.d/mysite.template
-      - ./files:/files  ## static assets, no need to Dockerfile COPY
+      - ./app/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./build:/build  ## static assets, no need to Dockerfile COPY
     ports:
       - "80:80"
     networks:
