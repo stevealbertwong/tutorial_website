@@ -7,8 +7,15 @@ import {
   REGISTER
 } from './constants/actionTypes';
 
+function isPromise(v) {
+  return v && typeof v.then === 'function';
+}
+// middleware is applied when create store
+// e.g. createStore(reducer, composeWithDevTools(getMiddleware()))
 const promiseMiddleware = store => next => action => {
+  console.log("debugging action.payload: ", action.payload)
   if (isPromise(action.payload)) {
+    // whenever there is async call, store gets updated
     store.dispatch({ type: ASYNC_START, subtype: action.type });
 
     const currentView = store.getState().viewChangeCounter;
@@ -47,6 +54,7 @@ const promiseMiddleware = store => next => action => {
 };
 
 const localStorageMiddleware = store => next => action => {
+  // dispatched message
   if (action.type === REGISTER || action.type === LOGIN) {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
@@ -56,13 +64,7 @@ const localStorageMiddleware = store => next => action => {
     window.localStorage.setItem('jwt', '');
     agent.setToken(null);
   }
-
   next(action);
 };
-
-function isPromise(v) {
-  return v && typeof v.then === 'function';
-}
-
 
 export { promiseMiddleware, localStorageMiddleware }

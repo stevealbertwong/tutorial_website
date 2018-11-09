@@ -21,12 +21,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Article extends React.Component {
-  componentWillMount() {
-    // response from componentWillMount write to model
-    // Promise == reverse async order
+  componentWillMount() {    
+    // after backend call done, dispatch to frontend model
     this.props.onLoad(Promise.all([
-      // url params ?? 
-      // Article related backend API get request
+      // url params ??       
       agent.Articles.get(this.props.match.params.id),
       agent.Comments.forArticle(this.props.match.params.id)
     ]));

@@ -70,3 +70,63 @@ The example application is a social blogging site (i.e. a Medium.com clone) call
 <br />
 
 [![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)
+
+
+## Node Server n Mongo Server
+
+'''
+npm init    ## create package.json
+
+npm install     ## if package.json already pre-configed
+
+npm install express     ## create package-lock.json, node_module
+
+npm install -D nodemon
+
+npm install dotenv body-parser cors      ## env variable, read request body, resolve cross origin request problem whn communicating with client
+
+npm install mongoose
+
+npm install bcryptjs
+npm install jsonwebtokens
+npm install slug
+
+mongod      ## start mongo server
+npm start   ## start app server, nodemon index.js
+npm seed            ## node seed.js
+
+
+
+'''
+package-lock.json: everything express depends on
+.gitignore: go to gitignore.io to create
+
+
+Include a .env file in the server directory with the following environment variables.
+
+'''
+PORT = 4000
+DATABASE = 'mongodb://localhost/<DATABASE_NAME>'
+SECRET = 'ThisIsATemporarySecretKey'
+'''
+
+
+
+client
+'''
+npm install -g create-react-app
+
+create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
+
+npm start       ## start server, see package.json -> cross-env PORT=4100 react-scripts start -> cross-env is web server
+
+react-scripts build     ## transpile all React files into 1 JS file bundle.js
+
+
+'''
+
+deployment
+'''
+ddd ## 
+
+'''

@@ -1,3 +1,7 @@
+/**
+ * 1. defines schema
+ * 2. msg handler
+ */
 import { LOAD_MCQ, STORE_MCQ, FILTER_MCQ } from '../constants/actionTypes';
 
 // !! pass in default state to prevent TypeError: Cannot read property 'question' of undefined

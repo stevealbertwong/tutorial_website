@@ -1,10 +1,18 @@
-// what is superagent ?? AJAX lib ??
+/**
+ * superagent -> AJAX lib 
+ * 
+ * import agent from '../agent';
+ * agent.Profile.follow(username)
+ * 
+ */
 import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'https://conduit.productionready.io/api';
+// const API_ROOT = 'https://conduit.productionready.io/api';
+// const API_ROOT = 'http://mongo:4000/api';
+const API_ROOT = 'localhost:4000/api';
 
 const encode = encodeURIComponent;
 const responseBody = res => res.body;
@@ -15,16 +23,26 @@ const tokenPlugin = req => {
     req.set('authorization', `Token ${token}`);
   }
 }
-// requests abstracted superagent AJAX calls
+
+// abstracted superagent AJAX calls e.g. requests.get(/users/login)
 const requests = {
+  // takes 1 arg
   del: url =>
     superagent.del(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
   get: url =>
     superagent.get(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
+  // takes 2 args
   put: (url, body) =>
     superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
   post: (url, body) =>
     superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody)
+};
+
+// abstracted backend calls e.g. agent.MC.getAll()
+// localhost:4000/api/mc
+const MC = {
+  getAll: () =>
+    requests.get('/mc')
 };
 
 const Auth = {
@@ -45,6 +63,7 @@ const Tags = {
 const limit = (count, p) => `limit=${count}&offset=${p ? p * count : 0}`;
 const omitSlug = article => Object.assign({}, article, { slug: undefined })
 
+// e.g. props.onClickDelete(agent.Articles.del(article.slug))
 const Articles = {
   all: page =>
     requests.get(`/articles?${limit(10, page)}`),
@@ -78,7 +97,7 @@ const Comments = {
   forArticle: slug =>
     requests.get(`/articles/${slug}/comments`)
 };
-
+// agent.Profile.follow(username)
 const Profile = {
   follow: username =>
     requests.post(`/profiles/${username}/follow`),
@@ -87,8 +106,9 @@ const Profile = {
   unfollow: username =>
     requests.del(`/profiles/${username}/follow`)
 };
-
+// agent.setToken(token);
 export default {
+  MC,
   Articles,
   Auth,
   Comments,

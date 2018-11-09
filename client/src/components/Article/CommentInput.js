@@ -14,12 +14,14 @@ class CommentInput extends React.Component {
     this.state = {
       body: ''
     };
-
-    this.setBody = ev => {
+  
+  // onClick event handler
+  this.setBody = ev => {
       this.setState({ body: ev.target.value });
-    };
+  };
 
-    this.createComment = ev => {
+  // event handler -> both frontend n backend call 
+  this.createComment = ev => {
       ev.preventDefault();
       const payload = agent.Comments.create(this.props.slug,
         { body: this.state.body });

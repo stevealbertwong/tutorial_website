@@ -42,11 +42,12 @@ class App extends React.Component {
   componentWillMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
-      agent.setToken(token);
+      // set token in API lib, include token in header
+      agent.setToken(token); 
     }
-
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
+  
   // if state contains appLoaded, allows route
   render() {
     if (this.props.appLoaded) {

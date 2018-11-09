@@ -11,14 +11,13 @@ const mapDispatchToProps = dispatch => ({
 
 const ArticleActions = props => {
   const article = props.article;
+  // when click delete button, dispatch msg w AJAX call as payload
   const del = () => {
     props.onClickDelete(agent.Articles.del(article.slug))
-  };
-  // if 
+  };  
   if (props.canModify) {
     return (
       <span>
-
         <Link
           to={`/editor/${article.slug}`}
           className="btn btn-outline-secondary btn-sm">
@@ -28,7 +27,6 @@ const ArticleActions = props => {
         <button className="btn btn-outline-danger btn-sm" onClick={del}>
           <i className="ion-trash-a"></i> Delete Article
         </button>
-
       </span>
     );
   }

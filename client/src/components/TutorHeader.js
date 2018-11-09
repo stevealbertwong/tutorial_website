@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 // navbar when logged out
 const LoggedOutView = props => {
   if (!props.currentUser) {
@@ -70,10 +69,10 @@ const LoggedInView = props => {
   return null;
 };
 
-
+// this.props.currentUser -> comes from parent
 class TutorHeader extends React.Component {
   componentWillMount(){
-    console.log("TutorHeader debug", this.props);
+    console.log("TutorHeader, passed by parent Tutor", this.props);
   }
   render() {
     return (
@@ -92,8 +91,6 @@ class TutorHeader extends React.Component {
         </div>
       
       </nav>
-
-
     );
   }
 }

@@ -8,9 +8,7 @@ import MCQ from '../components/MCQ';
 import TutorSideBar from './TutorSideBar.js'
 import './Tutor.css';
 import { LOAD_MCQ } from '../constants/actionTypes';
-
 import { Link } from 'react-router-dom';
-
 
 // Be sure to include styles at some point, probably during your bootstraping
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
@@ -20,22 +18,23 @@ import { Route, Switch } from 'react-router-dom';
 import { store } from '../store';
 import agent from '../agent';
 
-
 // local props tree listen to global DB tree
+// i.e. root component subscribed to frontend model
 const mapStateToProps = state => {
   return {
     ...state, // this.props == state -> by default, not strictly necessary
     // this.props.appName = state.common.appName
     appName: state.common.appName,
     currentUser: state.common.currentUser
-
   }};
 
 class Tutor extends React.Component { 
+  // get data from frontend model, pass to child component
   render() {
     if(this.props.appName){
       return (           
-        <div>        
+        <div>  
+
         <TutorHeader
           appName={this.props.appName}
           currentUser={this.props.currentUser} />
@@ -57,6 +56,7 @@ class Tutor extends React.Component {
   }
 }
 
+// export component + outside component subscription
 export default connect(mapStateToProps)(Tutor);
 
 
