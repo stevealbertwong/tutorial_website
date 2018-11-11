@@ -73,7 +73,9 @@ sudo chown mongodb:mongodb -R /var/lib/mongodb      ## make mongodb the owner
 
 sudo chmod 775 -R /var/lib/mongodb      ## let mongodb group write as well  
 
-sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
+sudo mongod --config /etc/mongodb.conf  ## ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
+
+sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory -> still cannot run ..
 
 sudo service mongod start   ## start w config, upstart
 sudo service mongod stop
