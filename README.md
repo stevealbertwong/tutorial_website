@@ -53,16 +53,39 @@ npm start       ## cross-env PORT=4100 react-scripts start
 ```
 
 
-## create new React project
+## Create new React project -> debug React node modules
 ```
 npm install -g create-react-app
 
 create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
 ```
 
-## Deployment
+## install Mongo
 ```
-mongod   
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+
+mongo       ## command prompt
+mongod      ## start server
+
+sudo service mongod start
+sudo service mongod stop
+sudo service mongod restart
+
+ps -xa | grep mongod        ## shows --dbpath n --config
+grep dbpath /etc/mongodb.conf       ## debug database location
+sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | grep REG
+## your database files will be present on the list
+
+sudo mkdir -p /data/db
+
+```
+
+## Deployment without Docker
+```
+sudo apt install -y mongodb-server
+mkdir /data/db
+mongod 
+# mongod --dbpath     ## your db path
 
 cd /server
 npm start           ## nodemon index.js
