@@ -33,9 +33,9 @@ node dist/index.js      ## production
 
 ## Starts Client server
 ```
-npm install -g create-react-app
+sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
 
-create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
+npm install         ## install react-scripts + other node modules
 
 react-scripts build     ## transpile all React files into 1 JS file bundle.js
 
@@ -43,6 +43,13 @@ npm start       ## cross-env PORT=4100 react-scripts start
 
 ```
 
+
+## create new React project
+```
+npm install -g create-react-app
+
+create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
+```
 
 ## Deployment
 ```
@@ -164,6 +171,7 @@ SECRET = 'ThisIsATemporarySecretKey'
 - register docker cloud
 - nginx.conf
 - https, SSL
+- frontend error handling if mongo/app server not available
 
 
 
