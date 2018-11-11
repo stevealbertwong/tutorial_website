@@ -1,26 +1,3 @@
-**Others**
-
-- package.json
-    - "npm start" abstraction of "nodemon index.js" or "cross-env PORT=4100 react-scripts start"
-    - "npm build" -> "react-scripts build"
-- package-lock.json
-    - express's dependencies 
-- Include a .env file in the server directory with the following environment variables
-
-```
-
-## .env 
-
-PORT = 4000
-DATABASE = 'mongodb://localhost/<DATABASE_NAME>'
-SECRET = 'ThisIsATemporarySecretKey'
-
-## .gitignore: go to gitignore.io to create
-
-```
-
-
-
 ## Starts Node Server n Mongo Server
 
 ```
@@ -81,12 +58,12 @@ npm start           ## cross-env PORT=4100 react-scripts start
 ```
 
 ## Docker Deployment
+https://hub.docker.com/_/nginx/
+
 ```
 ssh EC2
 
-scp docker-compose.yml nginx.conf
-
-git clone repo               ## /client + /server
+git clone repo
 
 ## compile frontend first, then docker-compose web, nginx to serve static assets w "shared volume" ??
 
@@ -119,8 +96,31 @@ chmod 777 /files
 ```
 
 
-## My Deployment
+## Locally Built Deployment
 ```
+## on your own linux machine
+cd server/
+docker build -t steven/node:latest
+docker push steven/node:latest
+
+cd nginx/
+docker build -t steven/nginx:latest
+docker push steven/nginx:latest
+
+cd mongo/
+docker build -t steven/mongo:latest
+docker push steven/mongo:latest
+
+## on EC2
+ssh EC2 
+scp docker-compose.yml nginx.conf
+docker compose up
+```
+
+## Single Node Deployment
+```
+## all steps on EC2
+ssh EC2 
 git clone repo
 
 cd server/
@@ -139,9 +139,58 @@ docker compose up
 
 ```
 
+**Others**
+
+- package.json
+    - "npm start" abstraction of "nodemon index.js" or "cross-env PORT=4100 react-scripts start"
+    - "npm build" -> "react-scripts build"
+- package-lock.json
+    - express's dependencies 
+- Include a .env file in the server directory with the following environment variables
+
+```
+
+## .env 
+
+PORT = 4000
+DATABASE = 'mongodb://localhost/<DATABASE_NAME>'
+SECRET = 'ThisIsATemporarySecretKey'
+
+## .gitignore: go to gitignore.io to create
+
+```
+
 ### TODO: 
 - register docker cloud
 - nginx.conf
+- https, SSL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
