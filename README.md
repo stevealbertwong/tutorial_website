@@ -64,19 +64,23 @@ create-react-app client         ## init standard React project files e.g. packag
 ```
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
-mongo       ## command prompt
-mongod      ## start server
+mongo       ## start client i.e. commnad prompt to query mongod
 
-sudo service mongod start
+mongod      ## start server without config
+mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data
+
+sudo service mongod start   ## start w config
 sudo service mongod stop
 sudo service mongod restart
 
 ps -xa | grep mongod        ## shows --dbpath n --config
-grep dbpath /etc/mongodb.conf       ## debug database location
+
+grep dbpath /etc/mongodb.conf       ## debug database location, /data/db or /var/lib/mongod
+
 sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | grep REG
 ## your database files will be present on the list
 
-sudo mkdir -p /data/db
+
 
 ```
 
