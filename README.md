@@ -3,6 +3,7 @@
 ```
 npm init    ## create package.json
 
+cd server/src
 npm install     ## if package.json already pre-configed
 
 npm install express     ## create package-lock.json, node_module
@@ -21,6 +22,9 @@ mongod                  ## start mongo server
 npm start               ## start app server, nodemon index.js
 npm seed                ## node seed.js
 
+npm start
+
+or alternatively 
 
 nodemon --exec babel-node src/index.js  ## dev
 
