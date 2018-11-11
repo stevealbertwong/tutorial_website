@@ -33,6 +33,11 @@ node dist/index.js      ## production
 
 ## Starts Client server
 ```
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+suudo apt install nodejs-legacy
+
 sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
 
 npm install         ## install react-scripts + other node modules
