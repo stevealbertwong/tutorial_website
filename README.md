@@ -33,8 +33,12 @@ node dist/index.js      ## production
 
 ## Starts Client server
 ```
+https://github.com/nodesource/distributions/blob/master/README.md#deb
+## install node
+
 sudo apt-get update
-sudo apt-get install nodejs
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -         ## install from node repo, not linux repo for latest version
+sudo apt-get install -y nodejs
 sudo apt-get install npm
 suudo apt install nodejs-legacy
 
