@@ -67,11 +67,21 @@ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 mongo       ## start client i.e. commnad prompt to query mongod
 
 mongod      ## start server without config
-mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data
 
-sudo service mongod start   ## start w config
+
+sudo chown mongodb:mongodb -R /var/lib/mongodb      ## make mongodb the owner 
+
+sudo chmod 775 -R /var/lib/mongodb      ## let mongodb group write as well  
+
+sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
+
+sudo service mongod start   ## start w config, upstart
 sudo service mongod stop
 sudo service mongod restart
+
+sudo systemctl restart mongod   ## SystemD
+sudo systemctl status mongod    ## check status of daemon/service
+sudo journalctl -u mongod       ## view logs of daemon/service
 
 ps -xa | grep mongod        ## shows --dbpath n --config
 
@@ -79,6 +89,8 @@ grep dbpath /etc/mongodb.conf       ## debug database location, /data/db or /var
 
 sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | grep REG
 ## your database files will be present on the list
+
+mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
 
 
 
