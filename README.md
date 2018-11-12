@@ -105,34 +105,71 @@ mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
 
 ## nginx serves React
 ```
-
-## install nginx
-
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
 
 ?? 
 after npm react-scripts build 
 index.html build folder serves a blank page ??
 
+## install nginx
+sudo apt-get update
+sudo apt-get install nginx
 
+## reconfigure firewall to allow access to the service. 
+## Nginx registers itself as a service with ufw upon installation
+
+sudo ufw enable
+sudo ufw default deny
+sudo ufw app list       ## listing of application profile
+sudo ufw status
+sudo ufw allow 'Nginx Full'     ## http(80) n https(443) 
 
 
 sudo mkdir /var/www
 cd /var/www/
+
 sudo gpasswd -a "$USER" www-data
 sudo chown -R "$USER":www-data /var/www
 find /var/www -type f -exec chmod 0660 {} \;
 sudo find /var/www -type d -exec chmod 2770 {} \;
+
+sudo chmod 777
+cp -R ./build/ .
+mv ./build/ .
+
 git clone [Your repository URL]
 cd [Your Repository Name]
 sudo npm install
 sudo npm run build
 
 
+sudo systemctl status nginx
+sudo systemctl stop nginx
 sudo systemctl start nginx
-
+sudo systemctl restart nginx
+sudo systemctl reload nginx
+sudo systemctl disable nginx
 sudo systemctl enable nginx     ## run nginx on startup
 
+sudo service nginx status
 
+## see what port nginx listening on 
+sudo netstat -tupln 
+
+nginx –s stop Stops the daemon immediately (using the TERM signal).
+nginx –s quit Stops the daemon gracefully (using the QUIT signal).
+nginx –s reopen Reopens the log files.
+nginx –s reload Reloads the configuration.
+
+
+
+
+## journalctrl => view systemd logs
+## -u: filter message of interest => specific unit/service file e.g. see all logs from Nginx unit
+journalctrl -u nginx.service
+journalctrl -u nginx.service --since today
+journalctrl -u ssh # same as journalctrl -u ssh.service
+journalctrl -b -u nginx -o json-pretty
 
 
 
