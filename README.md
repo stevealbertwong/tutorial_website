@@ -124,7 +124,13 @@ sudo ufw app list       ## listing of application profile
 sudo ufw status
 sudo ufw allow 'Nginx Full'     ## http(80) n https(443) 
 
+## config
+cat /etc/nginx/nginx.conf       ## global config
+/etc/nginx      ## default config fragment
+## create symlink
 
+
+## static assets folder
 sudo mkdir /var/www
 cd /var/www/
 
@@ -137,13 +143,27 @@ sudo chmod 777
 cp -R ./build/ .
 mv ./build/ .
 
+## update nginx html symlink from ../../../var/www to ../../../var/www/testjs 
+## s == soft link, create a new symlink, f == folder, n == update OR just delete then create a new one, i == receives prompt before overwriting
+## all folder tree must have open permission => easier to just use original folder
+ln -sfn  ../../../var/www/testjs html  ## create symlink called html that points to ../../../var/www/testjs
+ln -sfn ../../../var/www html  ## bring back to default setting, nginx server set to serve index.html inside html in config
+ls -lthr ## check symlink
+
+
+
+## build React static assets
 git clone [Your repository URL]
 cd [Your Repository Name]
 sudo npm install
 sudo npm run build
 
 
-sudo systemctl status nginx
+## port nginx listening on 
+sudo netstat -tupln 
+ps -xa | grep nginx
+
+sudo systemctl status nginx.service
 sudo systemctl stop nginx
 sudo systemctl start nginx
 sudo systemctl restart nginx
@@ -153,23 +173,19 @@ sudo systemctl enable nginx     ## run nginx on startup
 
 sudo service nginx status
 
-## see what port nginx listening on 
-sudo netstat -tupln 
-
 nginx –s stop Stops the daemon immediately (using the TERM signal).
 nginx –s quit Stops the daemon gracefully (using the QUIT signal).
 nginx –s reopen Reopens the log files.
 nginx –s reload Reloads the configuration.
 
 
-
-
-## journalctrl => view systemd logs
+## journalctl => view systemd logs
 ## -u: filter message of interest => specific unit/service file e.g. see all logs from Nginx unit
-journalctrl -u nginx.service
-journalctrl -u nginx.service --since today
-journalctrl -u ssh # same as journalctrl -u ssh.service
-journalctrl -b -u nginx -o json-pretty
+journalctl -u nginx.service
+journalctl -u nginx.service --since today
+journalctl -u ssh # same as journalctrl -u ssh.service
+journalctl -b -u nginx -o json-pretty
+
 
 
 
@@ -216,8 +232,8 @@ then no need to worry about volume when docker swarm
 
 cd /server
 babel src -d dist           ## tranlate right node syntax
-docker build -t steven/server:latest ## Dockerfile build fs
-docker push steven/image:latest     ## docker cloud
+docker build -t stevealbertwong/tutorial-nginx:latest ## Dockerfile build fs
+docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
 docker compose up           ## update image to registry image
 
 
@@ -300,6 +316,7 @@ SECRET = 'ThisIsATemporarySecretKey'
 
 ### TODO: 
 - register docker cloud
+- frontend routing
 - nginx.conf
 - https, SSL 
     - keith the coder
