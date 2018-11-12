@@ -240,16 +240,19 @@ cd /server
 babel src -d dist           ## tranlate right node syntax
 docker build --rm -t stevealbertwong/tutorial-nginx:latest . ## Dockerfile build fs
 
+docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . ## rebuild not using cache
+
 docker images
 docker login
 docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
 
 docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest
 
-docker run -it --name container_name -v volume_name:/container_path ubuntu bash -> login containers
+## docker run -it --name container_name -v volume_name:/container_path ubuntu bash -> login container to debug
+
+docker run -it stevealbertwong/tutorial-nginx:latest bash
 
 docker compose up           ## update image to registry image
-
 
 
 ## when updated code or Dockerfile -> rebuild fs
@@ -268,15 +271,15 @@ chmod 777 /files
 ```
 ## on your own linux machine
 cd server/
-docker build -t steven/node:latest
+docker build -t steven/node:latest .
 docker push steven/node:latest
 
 cd nginx/
-docker build -t steven/nginx:latest
+docker build -t steven/nginx:latest .
 docker push steven/nginx:latest
 
 cd mongo/
-docker build -t steven/mongo:latest
+docker build -t steven/mongo:latest .
 docker push steven/mongo:latest
 
 ## on EC2
