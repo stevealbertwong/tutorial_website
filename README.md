@@ -127,8 +127,20 @@ sudo ufw allow 'Nginx Full'     ## http(80) n https(443)
 ## config
 cat /etc/nginx/nginx.conf       ## global config
 /etc/nginx      ## default config fragment
-## create symlink
 
+## update symlink  /etc/nginx/sites-enabled/default 
+ls -lthra /etc/nginx/sites-enabled/
+
+sudo ln -sfn /home/steve/Desktop/tutorial_website/nginx/nginx.conf /etc/nginx/sites-enabled/default     ## default points at your nginx.conf
+
+sudo ln -sfn /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+## revert back, sites-enabled/default points at sites-available/default 
+
+## build React static assets folder
+git clone [Your repository URL]
+cd [Your Repository Name]
+sudo npm install
+sudo npm run build
 
 ## static assets folder
 sudo mkdir /var/www
@@ -152,12 +164,7 @@ ls -lthr ## check symlink
 
 
 
-## build React static assets
-git clone [Your repository URL]
-cd [Your Repository Name]
-sudo npm install
-sudo npm run build
-
+NGINX MANAGEMENT
 
 ## port nginx listening on 
 sudo netstat -tupln 
@@ -185,9 +192,6 @@ journalctl -u nginx.service
 journalctl -u nginx.service --since today
 journalctl -u ssh # same as journalctrl -u ssh.service
 journalctl -b -u nginx -o json-pretty
-
-
-
 
 ```
 
