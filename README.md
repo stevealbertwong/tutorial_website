@@ -1,4 +1,4 @@
-## Starts Node Server n Mongo Server
+## Starts Node Server 
 
 ```
 npm init    ## create package.json
@@ -50,9 +50,13 @@ sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
 
 npm install         ## install react-scripts + other node modules
 
-react-scripts build     ## transpile all React files into 1 JS file bundle.js
+npm react-scripts build     ## transpile all React files into 1 JS file bundle.js
+
+npm run build           ## same as npm react-scripts build 
 
 npm start       ## cross-env PORT=4100 react-scripts start
+
+
 
 ```
 
@@ -97,6 +101,38 @@ sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | g
 ## your database files will be present on the list
 
 mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
+```
+
+## nginx serves React
+```
+
+## install nginx
+
+
+?? 
+after npm react-scripts build 
+index.html build folder serves a blank page ??
+
+
+
+
+sudo mkdir /var/www
+cd /var/www/
+sudo gpasswd -a "$USER" www-data
+sudo chown -R "$USER":www-data /var/www
+find /var/www -type f -exec chmod 0660 {} \;
+sudo find /var/www -type d -exec chmod 2770 {} \;
+git clone [Your repository URL]
+cd [Your Repository Name]
+sudo npm install
+sudo npm run build
+
+
+sudo systemctl start nginx
+
+sudo systemctl enable nginx     ## run nginx on startup
+
+
 
 
 
@@ -115,6 +151,8 @@ node seed.js        ## seed mongo DB
 
 cd /client      
 npm start           ## cross-env PORT=4100 react-scripts start
+
+pm2 serve build     ## same as "npm start", PM2 use Serve to display index.html
 
 ```
 
@@ -155,6 +193,8 @@ docker build -t image
 chmod 777 /files
 
 ```
+
+
 
 
 ## Locally Built Deployment
@@ -224,7 +264,8 @@ SECRET = 'ThisIsATemporarySecretKey'
 ### TODO: 
 - register docker cloud
 - nginx.conf
-- https, SSL
+- https, SSL 
+    - keith the coder
 - frontend error handling if mongo/app server not available
 
 
