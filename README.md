@@ -246,9 +246,9 @@ docker images
 docker login
 docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
 
-docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest
+docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest       ## run nginx
 
-docker run stevealbertwong/tutorial-nginx:latest sh ## rebuild image w no CMD/ENTRYPOINT, login to debug
+docker run -it stevealbertwong/tutorial-nginx:latest sh     ## rebuild image w no CMD/ENTRYPOINT, login to debug
 
 docker run -it --name container_name -v volume_name:/container_path ubuntu bash 
 
