@@ -248,9 +248,13 @@ docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
 
 docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest
 
-## docker run -it --name container_name -v volume_name:/container_path ubuntu bash -> login container to debug
+docker run -it --name container_name -v volume_name:/container_path ubuntu bash -> rebuild a debug image to login container to debug
 
-docker run -it stevealbertwong/tutorial-nginx:latest bash
+docker run stevealbertwong/tutorial-nginx:latest sh
+
+## view container(even exited) log to debug
+docker ps -a        ## all containers ID etc.
+docker logs <containerID>
 
 docker compose up           ## update image to registry image
 
