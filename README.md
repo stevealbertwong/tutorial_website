@@ -107,6 +107,8 @@ mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
 ```
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
 
+https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/  - why ENTRYPOINT [nginx, -g, daemon off;]
+
 ?? 
 after npm react-scripts build 
 index.html build folder serves a blank page ??
@@ -236,15 +238,23 @@ then no need to worry about volume when docker swarm
 
 cd /server
 babel src -d dist           ## tranlate right node syntax
-docker build -t stevealbertwong/tutorial-nginx:latest ## Dockerfile build fs
+docker build --rm -t stevealbertwong/tutorial-nginx:latest . ## Dockerfile build fs
+
+docker images
+docker login
 docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
+
+docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest
+
+docker run -it --name container_name -v volume_name:/container_path ubuntu bash -> login containers
+
 docker compose up           ## update image to registry image
 
 
 
 ## when updated code or Dockerfile -> rebuild fs
 babel src -d dist
-docker build -t image
+docker build --rm -t image .
 
 
 chmod 777 /files
