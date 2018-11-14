@@ -135,7 +135,9 @@ docker network create mnet      ## mongo network for mongo, mongoimport, mongoex
 
 docker network inspect mnet
 
-docker run --name mongod-server --net mnet  mongo
+docker run --name mongod-server --net mnet -p 27017:27017 mongo
+docker kill mongod-server
+docker stop mongod-server
 docker rm mongod-server     
 
 docker run -it --rm --net mnet mongo sh -c 'exec mongo --host mongod-server'        ## mongo sh client
