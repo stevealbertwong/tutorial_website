@@ -68,13 +68,25 @@ npm install -g create-react-app
 create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
 ```
 
-## install Mongo
+## Mongo server
 ```
+## install mongo
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+
+sudo apt-get update
+
+sudo apt-get install -y mongodb-org
+
+
+
+## starts Mongo
 mongo       ## start client i.e. commnad prompt to query mongod
 
-mongod      ## start server without config
+mongod      ## start server without config, likely crash in linux since db file path wrong + other config issue
 
 
 sudo chown mongodb:mongodb -R /var/lib/mongodb      ## make mongodb the owner 
@@ -101,6 +113,21 @@ sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | g
 ## your database files will be present on the list
 
 mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
+
+## docker 
+https://techsparx.com/software-development/docker/damp/mongodb.html
+
+https://stackoverflow.com/questions/34559557/how-to-enable-authentication-on-mongodb-through-docker
+
+https://stackoverflow.com/questions/31210973/how-do-i-seed-a-mongo-database-using-docker-compose
+
+https://github.com/fvilers/docker-mongo-seed
+
+https://stackoverflow.com/questions/18496940/how-to-deal-with-persistent-storage-e-g-databases-in-docker?rq=1
+
+https://blog.philipphauer.de/local-development-docker-compose-seeding-stubs/
+
+
 ```
 
 ## nginx serves React
@@ -314,6 +341,14 @@ docker push steven/mongo:latest
 
 docker compose up
 
+```
+
+
+## Goal
+```
+ssh EC2
+git clone repo
+docker compose up
 ```
 
 **Others**
