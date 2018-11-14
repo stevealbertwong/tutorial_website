@@ -140,10 +140,18 @@ docker kill mongod-server
 docker stop mongod-server
 docker rm mongod-server     
 
+
+docker-compose up       ## starts mongo, mongoimport quits after seeding mongo
+
+docker build --rm --no-cache -t stevealbertwong/test-mongoseed:latest .
+
 docker run -it --rm --net mnet mongo sh -c 'exec mongo --host mongod-server'        ## mongo sh client
 
-docker build
-docker run
+docker run --name mongod-server --net mnet -p 27017:27017 mongo
+docker run --net mnet -e MONGO_HOST=mongo,MONGO_PORT=27017 stevealbertwong/test-mongoseed
+docker run -it --rm --net mongoseed_default mongo sh -c 'exec mongo --host mongo' ## if not specify network in docker-compose.yml
+docker run -it --rm --net mongoseed_mnet mongo sh -c 'exec mongo --host mongo'
+
 
 ```
 
