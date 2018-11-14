@@ -115,17 +115,17 @@ sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | g
 mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
 
 ## docker 
-https://techsparx.com/software-development/docker/damp/mongodb.html
+https://techsparx.com/software-development/docker/damp/mongodb.html - mongo connects to mongod in same network, persist database, mongo express
 
-https://stackoverflow.com/questions/34559557/how-to-enable-authentication-on-mongodb-through-docker
+https://stackoverflow.com/questions/31210973/how-do-i-seed-a-mongo-database-using-docker-compose - mongoimport 
 
-https://stackoverflow.com/questions/31210973/how-do-i-seed-a-mongo-database-using-docker-compose
+https://github.com/fvilers/docker-mongo-seed - mongoimport 
 
-https://github.com/fvilers/docker-mongo-seed
+https://blog.philipphauer.de/local-development-docker-compose-seeding-stubs/ - seed.js
 
 https://stackoverflow.com/questions/18496940/how-to-deal-with-persistent-storage-e-g-databases-in-docker?rq=1
 
-https://blog.philipphauer.de/local-development-docker-compose-seeding-stubs/
+https://stackoverflow.com/questions/34559557/how-to-enable-authentication-on-mongodb-through-docker
 
 
 ```
