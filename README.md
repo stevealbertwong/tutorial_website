@@ -1,4 +1,4 @@
-## Starts Node Server 
+## Node Server 
 
 ```
 npm init    ## create package.json
@@ -32,40 +32,6 @@ babel src -d dist       ## when code gets updated
 node dist/index.js      ## production
 
 
-```
-
-
-## Starts Client server
-```
-https://github.com/nodesource/distributions/blob/master/README.md#deb
-## install node
-
-sudo apt-get update
-curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -         ## install from node repo, not linux repo for latest version
-sudo apt-get install -y nodejs
-sudo apt-get install npm
-suudo apt install nodejs-legacy
-
-sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
-
-npm install         ## install react-scripts + other node modules
-
-npm react-scripts build     ## transpile all React files into 1 JS file bundle.js
-
-npm run build           ## same as npm react-scripts build 
-
-npm start       ## cross-env PORT=4100 react-scripts start
-
-
-
-```
-
-
-## Create new React project -> debug React node modules
-```
-npm install -g create-react-app
-
-create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
 ```
 
 ## Mongo server
@@ -155,7 +121,7 @@ docker run -it --rm --net mongoseed_mnet mongo sh -c 'exec mongo --host mongo'
 
 ```
 
-## nginx server serves React
+## Nginx server serves React, transpile React
 ```
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
 
@@ -270,6 +236,40 @@ docker logs <containerID>
 
 ```
 
+
+## Client server
+```
+https://github.com/nodesource/distributions/blob/master/README.md#deb
+## install node
+
+sudo apt-get update
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -         ## install from node repo, not linux repo for latest version
+sudo apt-get install -y nodejs
+sudo apt-get install npm
+suudo apt install nodejs-legacy
+
+sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
+
+npm install         ## install react-scripts + other node modules
+
+npm react-scripts build     ## transpile all React files into 1 JS file bundle.js
+
+npm run build           ## same as npm react-scripts build 
+
+npm start       ## cross-env PORT=4100 react-scripts start
+
+
+
+```
+
+
+## Create new React project -> debug React node modules
+```
+npm install -g create-react-app
+
+create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
+```
+
 ## Deployment without Docker
 ```
 sudo apt install -y mongodb-server
@@ -288,7 +288,7 @@ pm2 serve build     ## same as "npm start", PM2 use Serve to display index.html
 
 ```
 
-## Docker Deployment
+## docker-compose single node deployment
 https://hub.docker.com/_/nginx/
 
 ```
@@ -298,15 +298,21 @@ git clone repo
 
 ## compile frontend first, then docker-compose web, nginx to serve static assets w "shared volume" ??
 
-cd /client
-react-scripts build         ## auto output to /build
+## build static files into existing nginx image
+then no need to worry about volume when docker swarm
+cd ./client
+sudo npm run build         ## auto output to /build
+mv ./build ./nginx/build/
+docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . 
+
+docker-compose up
+
+
+OR alternatively
 surge                       ## ?? web server w domain name
 
 react-scripts build; mv ./build/index.html ./build/200.html; echo overt-health.surge.sh > build/CNAME; surge                 ## after build, rename html, save domain name into CNAME file, then upload static assets to web server w domain name
 
-OR alternatively
-build static files into existing nginx image
-then no need to worry about volume when docker swarm
 
 
 cd /server

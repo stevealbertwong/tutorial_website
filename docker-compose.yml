@@ -1,34 +1,57 @@
-version: "3"
+version: "2"
 services:
-  mongdb:
-    ## seeded mongodb image
-    image: stevealbertwong/mongo:latest
-    networks: 
-      - webnet
-    ports:
-      - "3040:27017"
+
   web:
-    image: benawad/slack-clone-server:latest
+    image: stevealbertwong/appserver:latest
     networks:
       - webnet
     depends_on:
-      - mongdb
+      - mongo
     # command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
     command: ["node", "index.js"]
   ## no Dockerfile for frontend since nginx instead of "react-scripts start"
+
   nginx:
-    image: nginx
-    volumes:
-      - ./app/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - ./build:/build  ## static assets, no need to Dockerfile COPY
+    build:./nginx
+    image: stevealbertwong/tutorial-nginx:latest
+    ## no need to volume since conf n static built in disk image
+    # volumes:
+    #   - ./app/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    #   - ./build:/build  
     ports:
       - "80:80"
     networks:
       - webnet  ## since nginx LB to app server, needs in same network
     depends_on:
       - web
-    ## copy your config template into official config before run nginx
-    command: /bin/bash -c "cat /etc/nginx/conf.d/mysite.template > 
-        /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    ## copy your config into official config before run nginx
+    # command: /bin/bash -c "cat /etc/nginx/conf.d/mysite.template > 
+        # /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
+  mongo:
+    image: mongo:3.4
+    ports:
+      - "27017:27017"
+    networks:
+      - webnet
+
+  mongo-seed:
+    build: ./mongo
+    image: stevealbertwong/tutorial-mongoseed:latest
+    environment:
+      # - MONGO_HOST=127.0.0.1
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+    networks:
+      - webnet
+    volumes:
+      - ./data:/data
+    depends_on: 
+      - mongo
+    command:
+      "mongoimport --host mongo --port 27017 --db test --mode upsert --type json --file /data/init.json --jsonArray"
+
 networks:
   webnet:
+    external: false
+
