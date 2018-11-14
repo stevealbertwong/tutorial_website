@@ -88,14 +88,17 @@ mongo       ## start client i.e. commnad prompt to query mongod
 
 mongod      ## start server without config, likely crash in linux since db file path wrong + other config issue
 
+## start server w your custom mongod data
+## when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
+## still cannot run .. -> must load config instead just provide 1 part of config
+sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) 
 
+## db data permission issue
 sudo chown mongodb:mongodb -R /var/lib/mongodb      ## make mongodb the owner 
 
 sudo chmod 775 -R /var/lib/mongodb      ## let mongodb group write as well  
 
-sudo mongod --config /etc/mongodb.conf  ## ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
-
-sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) ## start server w your custom mongod data, when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory -> still cannot run ..
+sudo mongod --config /etc/mongodb.conf      ## custom config
 
 sudo service mongod start   ## start w config, upstart
 sudo service mongod stop
@@ -128,9 +131,21 @@ https://stackoverflow.com/questions/18496940/how-to-deal-with-persistent-storage
 https://stackoverflow.com/questions/34559557/how-to-enable-authentication-on-mongodb-through-docker
 
 
+docker network create mnet      ## mongo network for mongo, mongoimport, mongoexpress client -> mongod server
+
+docker network inspect mnet
+
+docker run --name mongod-server --net mnet  mongo
+docker rm mongod-server     
+
+docker run -it --rm --net mnet mongo sh -c 'exec mongo --host mongod-server'        ## mongo sh client
+
+docker build
+docker run
+
 ```
 
-## nginx serves React
+## nginx server serves React
 ```
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
 
@@ -222,6 +237,27 @@ journalctl -u nginx.service --since today
 journalctl -u ssh # same as journalctrl -u ssh.service
 journalctl -b -u nginx -o json-pretty
 
+
+docker build --rm -t stevealbertwong/tutorial-nginx:latest . ## Dockerfile build fs
+
+docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . ## rebuild not using cache
+
+docker images
+docker login
+docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
+
+sudo docker kill/stop/rm <containerID>
+
+docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest       ## run nginx
+
+docker run -it stevealbertwong/tutorial-nginx:latest sh     ## rebuild image w no CMD/ENTRYPOINT, login to debug
+
+
+
+## view container(even exited) log to debug
+docker ps -a        ## all containers ID etc.
+docker logs <containerID>
+
 ```
 
 ## Deployment without Docker
@@ -265,25 +301,9 @@ then no need to worry about volume when docker swarm
 
 cd /server
 babel src -d dist           ## tranlate right node syntax
-docker build --rm -t stevealbertwong/tutorial-nginx:latest . ## Dockerfile build fs
 
-docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . ## rebuild not using cache
-
-docker images
-docker login
-docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
-
-sudo docker kill/stop/rm <containerID>
-
-docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest       ## run nginx
-
-docker run -it stevealbertwong/tutorial-nginx:latest sh     ## rebuild image w no CMD/ENTRYPOINT, login to debug
 
 docker run -it --name container_name -v volume_name:/container_path ubuntu bash 
-
-## view container(even exited) log to debug
-docker ps -a        ## all containers ID etc.
-docker logs <containerID>
 
 docker compose up           ## update image to registry image
 
