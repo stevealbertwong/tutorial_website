@@ -31,6 +31,8 @@ nodemon --exec babel-node src/index.js  ## dev
 babel src -d dist       ## when code gets updated
 node dist/index.js      ## production
 
+## docker 
+docker build --rm --no-cache -t stevealbertwong/tutorial-appserver:latest . 
 
 ```
 

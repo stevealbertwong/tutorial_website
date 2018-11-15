@@ -5,6 +5,8 @@ services:
     image: stevealbertwong/appserver:latest
     networks:
       - webnet
+    ports:
+      - "3000:3000"
     depends_on:
       - mongo
     # command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
