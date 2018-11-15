@@ -1,0 +1,40 @@
+## 1. domain.com:80/ route to /var/www/html/index.html
+## 2. client browser cache static files
+## 3. nginx n app server both serve static assets
+worker_processes auto;
+events {
+  worker_connections 768;
+  # Tells the worker to accept multiple connections at a time
+  multi_accept on;
+}
+server {
+  listen 80;  ## right now only support http  
+  
+  root /var/www/html/;  ## default root -> /usr/local/nginx/html/ 
+  index index.html; ## / route to /var/www/html/index.html
+  
+  server_name localhost
+
+  ## applies to EVERY request
+  ## try_files directive attempts to load CSS/JS/images etc first and for all other URIs, loads the index.html file in your build, displaying your app
+  location / {    
+    try_files $uri $uri/ $uri.html $uri.php @web;
+    expires 1d;   
+  }
+
+  ## applies to EVERY static asset request
+  location ~* ^.+\.(jpg|jpeg|png|gif|ico|css|js)$ {
+    access_log off; # Disable logging
+    expires 180d;  ## client browser cache static files
+  }
+
+  location @web {
+    proxy_pass http://web:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    gzip_static on;   ## compress file before send    
+    add_header Cache-Control private; ## browser not to cache
+    #alias /build/;    ## serve from shared volume folder
+  }
+}

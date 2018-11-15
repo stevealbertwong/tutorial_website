@@ -1,8 +1,9 @@
-## Starts Node Server n Mongo Server
+## Node Server 
 
 ```
 npm init    ## create package.json
 
+cd server/src
 npm install     ## if package.json already pre-configed
 
 npm install express     ## create package-lock.json, node_module
@@ -21,6 +22,9 @@ mongod                  ## start mongo server
 npm start               ## start app server, nodemon index.js
 npm seed                ## node seed.js
 
+npm start
+
+or alternatively 
 
 nodemon --exec babel-node src/index.js  ## dev
 
@@ -30,8 +34,210 @@ node dist/index.js      ## production
 
 ```
 
+## Mongo server
+```
+## install mongo
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 
-## Starts Client server
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+
+sudo apt-get update
+
+sudo apt-get install -y mongodb-org
+
+
+
+## starts Mongo
+mongo       ## start client i.e. commnad prompt to query mongod
+
+mongod      ## start server without config, likely crash in linux since db file path wrong + other config issue
+
+## start server w your custom mongod data
+## when mongod runs as group mongodb instead of ubuntu(daemon, service mongo start), needs permission to write to directory
+## still cannot run .. -> must load config instead just provide 1 part of config
+sudo mongod --dbpath $(grep dbpath /etc/mongodb.conf) 
+
+## db data permission issue
+sudo chown mongodb:mongodb -R /var/lib/mongodb      ## make mongodb the owner 
+
+sudo chmod 775 -R /var/lib/mongodb      ## let mongodb group write as well  
+
+sudo mongod --config /etc/mongodb.conf      ## custom config
+
+sudo service mongod start   ## start w config, upstart
+sudo service mongod stop
+sudo service mongod restart
+
+sudo systemctl restart mongod   ## SystemD
+sudo systemctl status mongod    ## check status of daemon/service
+sudo journalctl -u mongod       ## view logs of daemon/service
+
+ps -xa | grep mongod        ## shows --dbpath n --config
+
+grep dbpath /etc/mongodb.conf       ## debug database location, /data/db or /var/lib/mongod
+
+sudo lsof -p `ps aux | grep mongodb | head -n1 | tr -s ' ' | cut -d' ' -f 2` | grep REG
+## your database files will be present on the list
+
+mkdir -p /data/db/      ## -p: if parent does not exist, create parent as well
+
+## docker 
+https://techsparx.com/software-development/docker/damp/mongodb.html - mongo connects to mongod in same network, persist database, mongo express
+
+https://stackoverflow.com/questions/31210973/how-do-i-seed-a-mongo-database-using-docker-compose - mongoimport 
+
+https://github.com/fvilers/docker-mongo-seed - mongoimport 
+
+https://blog.philipphauer.de/local-development-docker-compose-seeding-stubs/ - seed.js
+
+https://stackoverflow.com/questions/18496940/how-to-deal-with-persistent-storage-e-g-databases-in-docker?rq=1
+
+https://stackoverflow.com/questions/34559557/how-to-enable-authentication-on-mongodb-through-docker
+
+
+docker network create mnet      ## mongo network for mongo, mongoimport, mongoexpress client -> mongod server
+
+docker network inspect mnet
+
+docker run --name mongod-server --net mnet -p 27017:27017 mongo
+docker kill mongod-server
+docker stop mongod-server
+docker rm mongod-server     
+
+
+docker-compose up       ## starts mongo, mongoimport quits after seeding mongo
+
+docker build --rm --no-cache -t stevealbertwong/test-mongoseed:latest .
+
+docker run -it --rm --net mnet mongo sh -c 'exec mongo --host mongod-server'        ## mongo sh client
+
+docker run --name mongod-server --net mnet -p 27017:27017 mongo
+docker run --net mnet -e MONGO_HOST=mongo,MONGO_PORT=27017 stevealbertwong/test-mongoseed
+docker run -it --rm --net mongoseed_default mongo sh -c 'exec mongo --host mongo' ## if not specify network in docker-compose.yml
+docker run -it --rm --net mongoseed_mnet mongo sh -c 'exec mongo --host mongo'
+
+
+```
+
+## Nginx server serves React, transpile React
+```
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+
+https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/  - why ENTRYPOINT [nginx, -g, daemon off;]
+
+?? 
+after npm react-scripts build 
+index.html build folder serves a blank page ??
+
+## install nginx
+sudo apt-get update
+sudo apt-get install nginx
+
+## reconfigure firewall to allow access to the service. 
+## Nginx registers itself as a service with ufw upon installation
+
+sudo ufw enable
+sudo ufw default deny
+sudo ufw app list       ## listing of application profile
+sudo ufw status
+sudo ufw allow 'Nginx Full'     ## http(80) n https(443) 
+
+## config
+cat /etc/nginx/nginx.conf       ## global config
+/etc/nginx      ## default config fragment
+
+## update symlink  /etc/nginx/sites-enabled/default 
+ls -lthra /etc/nginx/sites-enabled/
+
+sudo ln -sfn /home/steve/Desktop/tutorial_website/nginx/nginx.conf /etc/nginx/sites-enabled/default     ## default points at your nginx.conf
+
+sudo ln -sfn /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+## revert back, sites-enabled/default points at sites-available/default 
+
+## build React static assets folder
+git clone [Your repository URL]
+cd [Your Repository Name]
+sudo npm install
+sudo npm run build
+
+## static assets folder
+sudo mkdir /var/www
+cd /var/www/
+
+sudo gpasswd -a "$USER" www-data
+sudo chown -R "$USER":www-data /var/www
+find /var/www -type f -exec chmod 0660 {} \;
+sudo find /var/www -type d -exec chmod 2770 {} \;
+
+sudo chmod 777
+cp -R ./build/ .
+mv ./build/ .
+
+## update nginx html symlink from ../../../var/www to ../../../var/www/testjs 
+## s == soft link, create a new symlink, f == folder, n == update OR just delete then create a new one, i == receives prompt before overwriting
+## all folder tree must have open permission => easier to just use original folder
+ln -sfn  ../../../var/www/testjs html  ## create symlink called html that points to ../../../var/www/testjs
+ln -sfn ../../../var/www html  ## bring back to default setting, nginx server set to serve index.html inside html in config
+ls -lthr ## check symlink
+
+
+
+NGINX MANAGEMENT
+
+## port nginx listening on 
+sudo netstat -tupln 
+ps -xa | grep nginx
+
+sudo systemctl status nginx.service
+sudo systemctl stop nginx
+sudo systemctl start nginx
+sudo systemctl restart nginx
+sudo systemctl reload nginx
+sudo systemctl disable nginx
+sudo systemctl enable nginx     ## run nginx on startup
+
+sudo service nginx status
+
+nginx –s stop Stops the daemon immediately (using the TERM signal).
+nginx –s quit Stops the daemon gracefully (using the QUIT signal).
+nginx –s reopen Reopens the log files.
+nginx –s reload Reloads the configuration.
+
+
+## journalctl => view systemd logs
+## -u: filter message of interest => specific unit/service file e.g. see all logs from Nginx unit
+journalctl -u nginx.service
+journalctl -u nginx.service --since today
+journalctl -u ssh # same as journalctrl -u ssh.service
+journalctl -b -u nginx -o json-pretty
+
+
+docker build --rm -t stevealbertwong/tutorial-nginx:latest . ## Dockerfile build fs
+
+docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . ## rebuild not using cache
+
+docker images
+docker login
+docker push stevealbertwong/tutorial-nginx:latest     ## docker cloud
+
+sudo docker kill/stop/rm <containerID>
+
+docker run --rm -d -p 80:80 stevealbertwong/tutorial-nginx:latest       ## run nginx
+
+docker run -it stevealbertwong/tutorial-nginx:latest sh     ## rebuild image w no CMD/ENTRYPOINT, login to debug
+
+
+
+## view container(even exited) log to debug
+docker ps -a        ## all containers ID etc.
+docker logs <containerID>
+
+```
+
+
+## Client server
 ```
 https://github.com/nodesource/distributions/blob/master/README.md#deb
 ## install node
@@ -46,23 +252,30 @@ sudo apt install npm    ## not necessary if Dockerfile FROM node:latest
 
 npm install         ## install react-scripts + other node modules
 
-react-scripts build     ## transpile all React files into 1 JS file bundle.js
+npm react-scripts build     ## transpile all React files into 1 JS file bundle.js
+
+npm run build           ## same as npm react-scripts build 
 
 npm start       ## cross-env PORT=4100 react-scripts start
+
+
 
 ```
 
 
-## create new React project
+## Create new React project -> debug React node modules
 ```
 npm install -g create-react-app
 
 create-react-app client         ## init standard React project files e.g. package.json, /src, /public 
 ```
 
-## Deployment
+## Deployment without Docker
 ```
-mongod   
+sudo apt install -y mongodb-server
+mkdir /data/db
+mongod 
+# mongod --dbpath     ## your db path
 
 cd /server
 npm start           ## nodemon index.js
@@ -71,9 +284,11 @@ node seed.js        ## seed mongo DB
 cd /client      
 npm start           ## cross-env PORT=4100 react-scripts start
 
+pm2 serve build     ## same as "npm start", PM2 use Serve to display index.html
+
 ```
 
-## Docker Deployment
+## docker-compose single node deployment
 https://hub.docker.com/_/nginx/
 
 ```
@@ -83,28 +298,35 @@ git clone repo
 
 ## compile frontend first, then docker-compose web, nginx to serve static assets w "shared volume" ??
 
-cd /client
-react-scripts build         ## auto output to /build
+## build static files into existing nginx image
+then no need to worry about volume when docker swarm
+cd ./client
+sudo npm run build         ## auto output to /build
+mv ./build ./nginx/build/
+docker build --rm --no-cache -t stevealbertwong/tutorial-nginx:latest . 
+
+docker-compose up
+
+
+OR alternatively
 surge                       ## ?? web server w domain name
 
 react-scripts build; mv ./build/index.html ./build/200.html; echo overt-health.surge.sh > build/CNAME; surge                 ## after build, rename html, save domain name into CNAME file, then upload static assets to web server w domain name
 
-OR alternatively
-build static files into existing nginx image
-then no need to worry about volume when docker swarm
 
 
 cd /server
 babel src -d dist           ## tranlate right node syntax
-docker build -t steven/server:latest ## Dockerfile build fs
-docker push steven/image:latest     ## docker cloud
-docker compose up           ## update image to registry image
 
+
+docker run -it --name container_name -v volume_name:/container_path ubuntu bash 
+
+docker compose up           ## update image to registry image
 
 
 ## when updated code or Dockerfile -> rebuild fs
 babel src -d dist
-docker build -t image
+docker build --rm -t image .
 
 
 chmod 777 /files
@@ -112,19 +334,21 @@ chmod 777 /files
 ```
 
 
+
+
 ## Locally Built Deployment
 ```
 ## on your own linux machine
 cd server/
-docker build -t steven/node:latest
+docker build -t steven/node:latest .
 docker push steven/node:latest
 
 cd nginx/
-docker build -t steven/nginx:latest
+docker build -t steven/nginx:latest .
 docker push steven/nginx:latest
 
 cd mongo/
-docker build -t steven/mongo:latest
+docker build -t steven/mongo:latest .
 docker push steven/mongo:latest
 
 ## on EC2
@@ -155,6 +379,14 @@ docker compose up
 
 ```
 
+
+## Goal
+```
+ssh EC2
+git clone repo
+docker compose up
+```
+
 **Others**
 
 - package.json
@@ -178,8 +410,10 @@ SECRET = 'ThisIsATemporarySecretKey'
 
 ### TODO: 
 - register docker cloud
+- frontend routing
 - nginx.conf
-- https, SSL
+- https, SSL 
+    - keith the coder
 - frontend error handling if mongo/app server not available
 
 

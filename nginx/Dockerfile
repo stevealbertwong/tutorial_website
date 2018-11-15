@@ -23,7 +23,7 @@ RUN ln -sfn /app/nginx.conf /etc/nginx/conf.d/default.conf
 
 # ENV PORT 8000
 # ADD . /var/www
-# RUN cd /var/www ; npm install 
+# RUN cd /var/www ; npm install
 # RUN cp conf/mysite /etc/nginx/sites-available/ && \
-# 	cd /etc/nginx/sites-enabled && \
-# 	ln -s ../sites-available/mysite
+#     cd /etc/nginx/sites-enabled && \
+#     ln -s ../sites-available/mysite
