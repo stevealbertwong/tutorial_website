@@ -32,7 +32,14 @@ babel src -d dist       ## when code gets updated
 node dist/index.js      ## production
 
 ## docker 
-docker build --rm --no-cache -t stevealbertwong/tutorial-appserver:latest . 
+
+docker build --rm --no-cache -t stevealbertwong/tutorial-appserver:latest .		## built app server image from Dockerfile
+
+docker run -it stevealbertwong/tutorial-appserver:latest sh  ## debug
+
+docker run --net mongo_mnet -p 3000:3000 stevealbertwong/tutorial-appserver:latest
+
+
 
 ```
 
