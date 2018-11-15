@@ -1,12 +1,21 @@
 FROM node:latest
 WORKDIR /app
-COPY package-lock.json .
-COPY package.json .
-COPY server .
+#COPY package-lock.json .
+#COPY package.json .
+COPY ./src* .
 RUN npm install
 ENV NODE_ENV production
 EXPOSE 4000
+<<<<<<< HEAD
 CMD node index.js
+=======
+#CMD node index.js
+#CMD npm start
+#COPY ./wait-for-mongo.sh .
+RUN chmod 700 ./wait-for-mongo.sh
+
+ENTRYPOINT ["/bin/sh", "./wait-for-mongo.sh"]
+>>>>>>> f399fbf90850aa450e633aa63dbfd522c788d723
 
 # ARG NPM_REGISTRY
 # ARG NPM_USERNAME

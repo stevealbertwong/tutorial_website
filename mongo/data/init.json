@@ -12,3 +12,64 @@
     "admin": true
   }
 ]
+// [
+//   {      
+//     questionID: 0,
+//     class: null,
+//     question: "this is an article, and then student answers",
+//     choice1: null,
+//     choice2: null,
+//     choice3: null,
+//     choice4: null,
+//     answer: null        
+//   }
+//   ,{      
+//     questionID: 1,
+//     class: "MC/p6",
+//     question: "how many players in football team?",
+//     choice1: "30",
+//     choice2: "31",
+//     choice3: "32",
+//     choice4: "33",
+//     answer: "choice A. Explanation: choice A is better than B since ..."        
+//   }
+//   ,{
+//     questionID: 2,
+//     class: "MC/p5",
+//     question: "who is us president?",
+//     choice1: "trump",
+//     choice2: "josh kusner",
+//     choice3: "obama",
+//     choice4: "bush",
+//     answer: "choice B. Explanation: team 10 bitch "  
+//   }, {
+//     questionID: 3,
+//     class: "MC/p6",
+//     question: "who is google president?",
+//     choice1: "trump",
+//     choice2: "josh kusner",
+//     choice3: "obama",
+//     choice4: "bush",
+//     answer: "choice B. Explanation: team 10 bitch "
+    
+//   },{
+//     questionID: 4,
+//     class: "MC/p5",
+//     question: "who is yahoo president?",
+//     choice1: "trump",
+//     choice2: "josh kusner",
+//     choice3: "obama",
+//     choice4: "bush",
+//     answer: "choice B. Explanation: team 10 bitch "
+    
+//   },{
+//     questionID: 5,
+//     class: "MC/p5",
+//     question: "who is hello president?",
+//     choice1: "trump",
+//     choice2: "josh kusner",
+//     choice3: "obama",
+//     choice4: "bush",
+//     answer: "choice B. Explanation: team 10 bitch "    
+//   }      
+// ]        

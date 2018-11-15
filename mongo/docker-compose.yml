@@ -11,7 +11,11 @@ services:
 
   mongo-seed:
     build: .
+<<<<<<< HEAD
+    image: stevealbertwong/test-mongoseed 
+=======
     image: stevealbertwong/mongoseed 
+>>>>>>> e185bb63265227b16a328abe2fbadd01bb0fd52c
     environment:
       # - MONGO_HOST=127.0.0.1
       - MONGO_HOST=mongo

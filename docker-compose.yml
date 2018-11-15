@@ -1,20 +1,26 @@
 version: "2"
 services:
-
   web:
+    build: ./server
     image: stevealbertwong/appserver:latest
+    environment:
+      - DATABASE_NAME=tutorial
+      - PORT=4000
+      - DATABASE='mongodb://localhost/tutorial'
+      - SECRET='ThisIsATemporarySecretKey'
     networks:
       - webnet
     ports:
-      - "3000:3000"
+      - "4000:4000"
     depends_on:
       - mongo
-    # command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
-    command: ["node", "index.js"]
+    #command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
+    command: ["npm", "start"]
+    
   ## no Dockerfile for frontend since nginx instead of "react-scripts start"
 
   nginx:
-    build:./nginx
+    build: ./nginx
     image: stevealbertwong/tutorial-nginx:latest
     ## no need to volume since conf n static built in disk image
     # volumes:
@@ -49,11 +55,10 @@ services:
     volumes:
       - ./data:/data
     depends_on: 
-      - mongo
+      - web
     command:
       "mongoimport --host mongo --port 27017 --db test --mode upsert --type json --file /data/init.json --jsonArray"
 
 networks:
   webnet:
     external: false
-
