@@ -2,7 +2,7 @@ version: "2"
 services:
   web:
     build: ./server
-    image: stevealbertwong/appserver:latest
+    image: stevealbertwong/tutorial-appserver:latest
     environment:
       - DATABASE_NAME=tutorial
       - PORT=4000
