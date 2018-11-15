@@ -1,3 +1,10 @@
+## Docker compose 
+```
+docker rm `docker ps -aq` 			-> -aq returns all containers IDs
+docker rmi $(docker images -q)		-> rm image
+docker-compose up
+```
+
 ## Node Server 
 
 ```
